@@ -1,0 +1,16 @@
+{
+  "name": "watchlist-system",
+  "version": "1.0.0",
+  "description": "Stealth Security Watchlist Database",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.1.1"
+  }
+}
