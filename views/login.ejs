@@ -33,12 +33,18 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-auth-compat.js"></script>
     <script>
         const firebaseConfig = {
-            apiKey: "YOUR_FIREBASE_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAPLBblnH1nL1FpoEiceAD_GXmbbvfbD2I",
+  authDomain: "stealth-security-watchlist.firebaseapp.com",
+  databaseURL: "https://stealth-security-watchlist-default-rtdb.firebaseio.com",
+  projectId: "stealth-security-watchlist",
+  storageBucket: "stealth-security-watchlist.firebasestorage.app",
+  messagingSenderId: "660499263656",
+  appId: "1:660499263656:web:fb8629c5950a7f71c0529d",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
         };
         firebase.initializeApp(firebaseConfig);
 
