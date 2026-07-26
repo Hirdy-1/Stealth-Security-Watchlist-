@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stealth Security | Watchlist Database</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Stealth Security Watchlist</h1>
+            <p>Secure Operations Database Management | <a href="/logout" class="logout-link">Logout</a></p>
+        </header>
+
+        <!-- Entry Submission Form -->
+        <section class="form-section">
+            <h2>Add New Watchlist Entry</h2>
+            <form action="/api/watchlist" method="POST">
+                <div class="input-group">
+                    <label for="discordUsername">Discord Username:</label>
+                    <input type="text" id="discordUsername" name="discordUsername" placeholder="e.g. user_name" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="discordId">Discord ID:</label>
+                    <input type="text" id="discordId" name="discordId" placeholder="e.g. 123456789012345678" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="reason">Reason:</label>
+                    <textarea id="reason" name="reason" rows="3" placeholder="Specify infraction details..." required></textarea>
+                </div>
+
+                <div class="input-group">
+                    <label for="priority">Priority:</label>
+                    <select id="priority" name="priority" required>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-submit">Submit to Database</button>
+            </form>
+        </section>
+
+        <!-- Database Records Table -->
+        <section class="table-section">
+            <div class="table-header-flex">
+                <h2>Active Database Records</h2>
+                <div class="controls-group">
+                    <input type="text" id="searchInput" placeholder="Search username, ID, case..." onkeyup="filterTable()">
+                    <select id="priorityFilter" onchange="filterTable()">
+                        <option value="">All Priorities</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <table id="watchlistTable">
+                <thead>
+                    <tr>
+                        <th>Case Number</th>
+                        <th>Discord Username</th>
+                        <th>Discord ID</th>
+                        <th>Reason</th>
+                        <th>Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (watchlist.length === 0) { %>
+                        <tr id="noDataRow"><td colspan="5" class="no-data">No records found in database.</td></tr>
+                    <% } else { %>
+                        <% watchlist.forEach(item => { %>
+                            <tr class="watchlist-row" data-priority="<%= item.priority %>">
+                                <td><strong><%= item.caseNumber %></strong></td>
+                                <td class="searchable"><%= item.discordUsername %></td>
+                                <td class="searchable"><code><%= item.discordId %></code></td>
+                                <td class="searchable"><%= item.reason %></td>
+                                <td><span class="badge <%= item.priority.toLowerCase() %>"><%= item.priority %></span></td>
+                            </tr>
+                        <% }) %>
+                        <tr id="noResultsRow" style="display: none;"><td colspan="5" class="no-data">No matching records found.</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        function filterTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const priorityFilter = document.getElementById('priorityFilter').value.toLowerCase();
+            const rows = document.querySelectorAll('.watchlist-row');
+            const noResultsRow = document.getElementById('noResultsRow');
+            
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const textContent = row.innerText.toLowerCase();
+                const rowPriority = row.getAttribute('data-priority').toLowerCase();
+
+                const matchesSearch = textContent.includes(searchInput);
+                const matchesPriority = !priorityFilter || rowPriority === priorityFilter;
+
+                if (matchesSearch && matchesPriority) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            if (noResultsRow) {
+                noResultsRow.style.display = (visibleCount === 0 && rows.length > 0) ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>
